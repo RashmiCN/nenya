@@ -17,7 +17,7 @@ The app  enable instructors to provide additional notes  live to students who ar
 ## Instructions
 ## 1. Clone the repository
 ```bash
-git clone 
+git clone https://github.com/RashmiCN/nenya.git
 cd cfc-covid-19-video-transcriber
 ```
 
