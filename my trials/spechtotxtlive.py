@@ -21,21 +21,15 @@ BUF_MAX_SIZE = CHUNK * 10
 q = Queue(maxsize=int(round(BUF_MAX_SIZE / CHUNK)))
 # Create an instance of AudioSource
 audio_source = AudioSource(q, True, True)
-###############################################
+###############################################     
 #### Prepare Speech to Text Service ########
 ###############################################
 # initialize speech to text service
-speech_to_text = SpeechToTextV1(
-    url="<Provide URL Here>", 
-    iam_apikey="<provide api key here>")
-# SpeechToTextV1(
-#     username='YOUR SERVICE USERNAME',
-#     password='YOUR SERVICE PASSWORD',
-#     url='url')
-# load_dotenv()
-# authenticator = IAMAuthenticator(os.getenv("STT_API_KEY")) 
-# service = SpeechToTextV1(authenticator=authenticator) 
-# service.set_service_url(os.getenv("STT_URL"))
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Give Keys here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+# speech_to_text = SpeechToTextV1(
+#    url="URL HERE", 
+#    iam_apikey="APIKEY HERE")
+
 # define callback for the speech to text service
 class MyRecognizeCallback(RecognizeCallback):
     def __init__(self):
