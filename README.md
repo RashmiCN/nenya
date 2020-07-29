@@ -97,7 +97,7 @@ docker run --publish 3000:3000 --detach --name demo video-transcriber:1.0
       * `test`: Runs all unit tests inside of the project's `test` directory.
 
     The server is running at: `http://localhost:3000/` in your browser. 
-    if pyaudio isnt getting installed please run pip install on whl file with 32 or 64 bit - which ever works. that is provided in repo as well
+  ### If pyaudio isnt getting installed please run pip install on whl file with 32 or 64 bit - which ever works. that is provided in repo as well
 
 ### Frontend UI Development
 1. If you have not done so already, install [`Node.js`](https://nodejs.org) and [`Yarn`](https://classic.yarnpkg.com/en/docs/install/).
