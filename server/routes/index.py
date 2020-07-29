@@ -11,6 +11,7 @@ from watson_developer_cloud import SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from watson_developer_cloud.websocket import RecognizeCallback, AudioSource
 from dotenv import load_dotenv
+import json
 # from threading import Thread
 import platform
 
@@ -92,13 +93,16 @@ def live_translate():
     q = Queue(maxsize=int(round(BUF_MAX_SIZE / CHUNK)))
     # Create an instance of AudioSource
     audio_source = AudioSource(q, True, True)
+    audioTrans = {}
+    with open("server\\routes\\spchToTxtLive.json", 'w') as f:
+        json.dump(audioTrans, f)
     ###############################################
     #### Prepare Speech to Text Service ########
     ###############################################
     # initialize speech to text service
     speech_to_text = SpeechToTextV1(
-        url="https://api.eu-gb.speech-to-text.watson.cloud.ibm.com/instances/87521fcc-f094-44d9-9953-1a91d68215f3", 
-        iam_apikey="zujIlMW63qNznLI7Y7zgnT8Bt5sbebqyMJx0wMHVnAY1")
+        url="<Provide URL Here>", 
+        iam_apikey="<provide api key here>")
     # SpeechToTextV1(
     #     username='YOUR SERVICE USERNAME',
     #     password='YOUR SERVICE PASSWORD',
@@ -115,6 +119,7 @@ def live_translate():
         def on_transcription(self, transcript):
             print('transcript: {}'.format(transcript))
             print(transcript)
+            audioTrans = transcript
         def on_connected(self):
             print('Connection was successful')
         def on_error(self, error):
@@ -130,7 +135,11 @@ def live_translate():
             print('{0}final: {1}'.format(
                 '' if data['results'][0]['final'] else 'not ',
                 self.transcript
-            )+ "---------------")
+            ))
+            audioTrans = '{0}final: {1}'.format(
+                '' if data['results'][0]['final'] else 'not ',
+                self.transcript)
+            json.dump(audioTrans, f)
             # print(data)
         def on_close(self):
             print("Connection closed")
@@ -142,6 +151,7 @@ def live_translate():
                                                 recognize_callback=mycallback,
                                                 interim_results= True)
         print(mycallback.transcript)
+
     ###############################################
     #### Prepare the for recording using Pyaudio ##
     ###############################################
@@ -176,8 +186,9 @@ def live_translate():
     try:
         recognize_thread = Thread(target=recognize_using_weboscket, args=())
         recognize_thread.start()
-        while True:
+        while True:          
             pass
+        
     except KeyboardInterrupt:
         # stop recording
         audio_source.completed_recording()

@@ -1,19 +1,10 @@
-# Call for Code Video Transcriber Starter Kit
+# Call for Code Video Transcriber Starter Kit - Reused to add Live Transcriber for MVP purposes
 In an at-home learning environment, many students will gravitate to video lessons. Video can be an excellent way to learn, but instructors sometimes need to provide notes or assigned readings to students who either need additional or alternative ways of learning, or who do not have access to the original video. 
 
-The app you build in this tutorial will enable instructors to provide additional notes to students who are using video and audio tools as their primary way to learn. Teachers can also easily provide written instructions for students who for whatever reason cannot play a video. 
+The app  enable instructors to provide additional notes  live to students who are using video and audio tools as their primary way to learn. Teachers can also easily provide written instructions for students who for whatever reason cannot play a video. 
 
-The code and related files for this tutorial are located in the accompanying <a href="https://github.com/Call-for-Code/cfc-covid-19-video-transcriber" target="\_blank">GitHub repo</a>.
-
-## Learning objectives
-In this tutorial, you'll learn how to:
-
-* Create a Python app that can extract text from instructional videos using Watson Speech to Text. 
-* Translate text using Watson Language Translator and store the resulting transcript IBM Cloud Object Storage. 
-* Create a Vue.js frontend that enables users to upload videos and receive the resulting transcription.
 
 ## Prerequisites
-To complete this tutorial, you must:
 
 * Register for an [IBM Cloud](https://www.ibm.com/account/reg/us-en/signup?formid=urx-42793&eventid=cfc-2020?cm_mmc=OSocial_Blog-_-Audience+Developer_Developer+Conversation-_-WW_WW-_-cfc-2020-ghub-starterkit-education_ov75914&cm_mmca1=000039JL&cm_mmca2=10008917) account.
 * Install [`Python 3.6`](https://www.python.org/downloads/).
@@ -21,13 +12,12 @@ To complete this tutorial, you must:
 * Install [`Node.js`](https://nodejs.org).
 * Install [`Yarn`](https://classic.yarnpkg.com/en/docs/install/).
 
-## Estimated time
-This tutorial should take about 30 minutes to complete.
+
 
 ## Instructions
 ## 1. Clone the repository
 ```bash
-git clone git@github.com:Call-for-Code/cfc-covid-19-video-transcriber.git
+git clone 
 cd cfc-covid-19-video-transcriber
 ```
 
@@ -46,6 +36,8 @@ COS_API_KEY=<cloud object storage api key>
 COS_IAM_ROLE_CRN=<cloud object storage IAM role crn. e.g. crn:v1:bluemix:public:iam::::serviceRole:Writer>
 COS_ENDPOINT=<cloud object storage endpoint. e.g. s3.eu-gb.cloud-object-storage.appdomain.cloud>
 COS_BUCKET_NAME=<cloud object storage bucket name>
+
+Add the url and iam-api-key for speech to text in `server/routes/index.py` and `liveTrans.py`
 ```
 
 ## 3. Create IBM Cloud services and obtain service credentials
@@ -71,7 +63,7 @@ docker run --publish 3000:3000 --detach --name demo video-transcriber:1.0
 ```
 
 ### Server
-1. This tutorial uses [pipenv](https://github.com/pypa/pipenv). If you are using another python distribution or package manager, you will need to install the dependencies located in the `Pipfile`. Alternatively, using pipenv, from the root project directory, create a pipenv virtual environment.
+1. This code uses [pipenv](https://github.com/pypa/pipenv). If you are using another python distribution or package manager, you will need to install the dependencies located in the `Pipfile`. Alternatively, using pipenv, from the root project directory, create a pipenv virtual environment.
     ```bash
     pipenv --python <path to python executable>
     ```
@@ -105,6 +97,7 @@ docker run --publish 3000:3000 --detach --name demo video-transcriber:1.0
       * `test`: Runs all unit tests inside of the project's `test` directory.
 
     The server is running at: `http://localhost:3000/` in your browser. 
+    if pyaudio isnt getting installed please run pip install on whl file with 32 or 64 bit - which ever works. that is provided in repo as well
 
 ### Frontend UI Development
 1. If you have not done so already, install [`Node.js`](https://nodejs.org) and [`Yarn`](https://classic.yarnpkg.com/en/docs/install/).
@@ -133,8 +126,9 @@ docker run --publish 3000:3000 --detach --name demo video-transcriber:1.0
 The frontend UI is now running at `http://localhost:8080/` in your browser. 
 
 ## 5. Language Translator Extension
-This tutorial shows you how to create a Watson Language Translator service and write the necessary server side code to translate video transcriptions. The front-end UI implementation is left as an extension for you to implement yourself. Hint - inspecting the `upload_video` function in `server/routes/index.py`, you can see that the server side expects a `source` and a `target` language as part of the POST request form data to `/upload_video`. Supported language models are provided at [https://localhost:3000/language_models](http://localhost:3000/language_models) once your server is running.
+Here we create a Watson Language Translator service and write the necessary server side code to translate video transcriptions. The front-end UI implementation is left as an extension for you to implement yourself. Hint - inspecting the `upload_video` function in `server/routes/index.py`, you can see that the server side expects a `source` and a `target` language as part of the POST request form data to `/upload_video`. Supported language models are provided at [https://localhost:3000/language_models](http://localhost:3000/language_models) once your server is running.
 
+For Live translation we can see the code present in `server/route/index.py` and liveTranslate.py for standalone run
 ## 6. Deploy the app
 The following instructions apply to deploying the Python Flask server. To deploy the frontend UI, follow the [Node.js build and deploy tutorial](https://developer.ibm.com/node/getting-started-node-js-ibm-cloud/).
 
@@ -209,4 +203,14 @@ ibmcloud dev debug
 
 ## Summary
 
-This tutorial has shown you how to build and deploy an app that uses Watson Speech to Text to transcribe video files. This tutorial also covered deploying a Watson Language Translator and IBM Cloud Object Storage. You can use this simple app as a base to add more complex functionality and create a robust learning app that will help instructors and students improve their online learning experience.
+We have built and deployed Live Trasnslation on top of tutorial provided  that uses Watson Speech to Text to transcribe video files. Which also covered deploying a Watson Language Translator and IBM Cloud Object Storage. On click of a button we can start live translation of speech to text and see our sppech live
+
+## Future
+
+We can add liveTrans.py as a chrome plugin which will open an web page and translate any webapge live based on permissions granted ofcourse such that this can run independently
+
+Currently this works when both parties have turned this option on. Next aim is to enable it individually
+
+This can not only be reused on education but also in enterprise meetings provided as plugin to our meeting modes like zoom webex etc.
+
+IBM Watson provides awesome features like flagging particular words etc - this can be used to highlight notes which are very much valuable.

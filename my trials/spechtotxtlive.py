@@ -3,6 +3,7 @@ import pyaudio
 from watson_developer_cloud import SpeechToTextV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from watson_developer_cloud.websocket import RecognizeCallback, AudioSource
+from dotenv import load_dotenv
 from threading import Thread
 import os, platform
 try:
@@ -24,18 +25,24 @@ audio_source = AudioSource(q, True, True)
 #### Prepare Speech to Text Service ########
 ###############################################
 # initialize speech to text service
-# speech_to_text = SpeechToTextV1(
+speech_to_text = SpeechToTextV1(
+    url="<Provide URL Here>", 
+    iam_apikey="<provide api key here>")
+# SpeechToTextV1(
 #     username='YOUR SERVICE USERNAME',
 #     password='YOUR SERVICE PASSWORD',
-#     url='https://stream.watsonplatform.net/speech-to-text/api')
-authenticator = IAMAuthenticator("zujIlMW63qNznLI7Y7zgnT8Bt5sbebqyMJx0wMHVnAY1") 
-service = SpeechToTextV1(authenticator=authenticator) 
-service.set_service_url("https://api.eu-gb.speech-to-text.watson.cloud.ibm.com/instances/87521fcc-f094-44d9-9953-1a91d68215f3")
+#     url='url')
+# load_dotenv()
+# authenticator = IAMAuthenticator(os.getenv("STT_API_KEY")) 
+# service = SpeechToTextV1(authenticator=authenticator) 
+# service.set_service_url(os.getenv("STT_URL"))
 # define callback for the speech to text service
 class MyRecognizeCallback(RecognizeCallback):
     def __init__(self):
         RecognizeCallback.__init__(self)
+        self.transcript = None
     def on_transcription(self, transcript):
+        print('transcript: {}'.format(transcript))
         print(transcript)
     def on_connected(self):
         print('Connection was successful')
@@ -48,15 +55,22 @@ class MyRecognizeCallback(RecognizeCallback):
     def on_hypothesis(self, hypothesis):
         print(hypothesis)
     def on_data(self, data):
-        print(data)
+        self.transcript = data['results'][0]['alternatives'][0]['transcript']
+        print('{0}final: {1}'.format(
+            '' if data['results'][0]['final'] else 'not ',
+            self.transcript
+        ))
+        # print(data)
     def on_close(self):
         print("Connection closed")
 # this function will initiate the recognize service and pass in the AudioSource
 def recognize_using_weboscket(*args):
     mycallback = MyRecognizeCallback()
-    service.recognize_using_websocket(audio=audio_source,
+    speech_to_text.recognize_using_websocket(audio=audio_source,
                                              content_type='audio/l16; rate=44100',
-                                             recognize_callback=mycallback)
+                                             recognize_callback=mycallback,
+                                             interim_results= True)
+    print(mycallback.transcript)
 ###############################################
 #### Prepare the for recording using Pyaudio ##
 ###############################################

@@ -26,8 +26,8 @@ audio_source = AudioSource(q, True, True)
 ###############################################
 # initialize speech to text service
 speech_to_text = SpeechToTextV1(
-    url="https://api.eu-gb.speech-to-text.watson.cloud.ibm.com/instances/87521fcc-f094-44d9-9953-1a91d68215f3", 
-    iam_apikey="zujIlMW63qNznLI7Y7zgnT8Bt5sbebqyMJx0wMHVnAY1")
+    url="<Provide URL Here>", 
+    iam_apikey="<provide api key here>")
 # SpeechToTextV1(
 #     username='YOUR SERVICE USERNAME',
 #     password='YOUR SERVICE PASSWORD',
